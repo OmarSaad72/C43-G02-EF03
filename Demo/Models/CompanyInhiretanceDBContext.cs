@@ -15,8 +15,9 @@ namespace Demo.Models
             optionsBuilder.UseSqlServer("Server =.;Database= CompanyInhiretance; Trusted_Connection= true; trustservercertificate= true");
         }
 
-        public DbSet<FT_Employee> FullTimeEmployee { get; set; }
-        public DbSet<PT_Employee> PartTimeEmployee { get; set; }
+        //public DbSet<FT_Employee> FullTimeEmployee { get; set; }
+        //public DbSet<PT_Employee> PartTimeEmployee { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,13 @@ namespace Demo.Models
                 .Property(e => e.HourRate)
                 .HasColumnType("decimal");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            #region TPH
+            modelBuilder.Entity<FT_Employee>()
+                .HasBaseType<Employee>();
+            modelBuilder.Entity<PT_Employee>()
+                .HasBaseType<Employee>();
+            #endregion
         }
     }
 }
